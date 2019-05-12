@@ -36,7 +36,8 @@ app.use(session({ secret: 'session secret key' }));
 // Routes
 app.use('/projects', qraphqlHttp({
   schema: require('./src/graphql/schema'),
-  rootValue: require('./src/routes/projects')
+  rootValue: require('./src/routes/projects'),
+  graphiql: true
 }))
 // app.use('/projects', require('./src/routes/projects'));
 app.use('/tasks', require('./src/routes/tasks'));
