@@ -1,38 +1,30 @@
 'use strict'
 
 const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const graphqlHTTP = require('express-graphql');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const session = require('express-session');
+
+const schema = require('./src/schema/schema');
+const db = require('./config/database');
 
 require('dotenv').config();
 
-const mongooseOptions = {
-  useNewUrlParser: true
-};
-mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, mongooseOptions);
-
-mongoose.connection.on('connected', () => {
-  console.warn('MongoDB connection established!');
-});
-mongoose.connection.on('error', () => {
-  console.error('MongoDB connection error. Please make sure MongoDB is running.');
-  process.exit();
-});
+db.authenticate()
+  .then(() => console.log('MySQL connection established!'))
+  .catch(err => console.log('MySQL connection error. Please make sure MySQL is running.\n' + err))
 
 const app = express();
 
 app.use(cors());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(session({ secret: 'session secret key' }));
 
 // Routes
+app.use('/graphql', graphqlHTTP({
+  schema,
+  graphiql: true
+}));
 app.use('/projects', require('./src/routes/projects'));
 app.use('/tasks', require('./src/routes/tasks'));
 

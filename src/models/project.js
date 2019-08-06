@@ -1,29 +1,26 @@
 'use strict'
 
-const mongoose = require('mongoose');
+const Sequelize = require('sequelize');
+const db = require('../../config/database');
 
-const Schema = mongoose.Schema;
-
-const projectSchema = new Schema({
+const Project = db.define('gig', {
     title: {
-        type: String,
+        type: Sequelize.STRING,
         required: true,
         max: 20
     },
     description: {
-        type: String,
+        type: Sequelize.STRING,
         max: 200
     },
     createdAt: {
-        type:Date,
+        type: Sequelize.DATE,
         required: true
     },
     updatedAt: {
-        type: Date,
+        type: Sequelize.DATE,
         require: true
     }
 });
-
-const Project = mongoose.model('project', projectSchema);
 
 module.exports = Project;

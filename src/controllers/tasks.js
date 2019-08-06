@@ -1,6 +1,6 @@
 'use strict'
 
-const Task = require('../models/task');
+const Task = require('../models/Task');
 
 module.exports = {
     addTask: async (req, res, next) => {
