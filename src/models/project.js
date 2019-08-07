@@ -5,21 +5,16 @@ const db = require('../../config/database');
 
 const Project = db.define('gig', {
     title: {
-        type: Sequelize.STRING,
-        required: true,
-        max: 20
+        type: Sequelize.STRING
     },
     description: {
-        type: Sequelize.STRING,
-        max: 200
+        type: Sequelize.STRING
     },
     createdAt: {
-        type: Sequelize.DATE,
-        required: true
+        type: Sequelize.DATE
     },
     updatedAt: {
-        type: Sequelize.DATE,
-        require: true
+        type: Sequelize.DATE
     }
 });
 

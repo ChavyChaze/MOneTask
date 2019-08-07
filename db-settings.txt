@@ -1,0 +1,18 @@
+CREATE TABLE Project (
+  id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title varchar(20) NOT NULL,
+  description varchar(200),
+  createdAt date,
+  updatedAt date,
+  PRIMARY KEY (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+CREATE TABLE Task (
+  id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  projectId TINYINT UNSIGNED NOT NULL,
+  title varchar(20) NOT NULL,
+  description varchar(200),
+  createdAt date,
+  updatedAt date,
+  PRIMARY KEY (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
