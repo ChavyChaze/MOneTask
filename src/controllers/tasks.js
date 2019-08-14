@@ -25,7 +25,8 @@ module.exports = {
 
     getAllTasks: async (req, res, next) => {
         try {
-            await Task.find({}, async (err, task) => {
+            await Task.findAll({ raw: true }/*, async (err, task) => {
+                console.log('dupa')
                 if (err) {
                     return res.status(400).send({ error: err.message });
                 }
@@ -34,7 +35,7 @@ module.exports = {
                     tasksMap[task._id] = task;
                 });
                 res.status(200).send(tasksMap);
-            });
+            }*/).then(task=> res.status(200).send(task));
         } catch (error) {
             res.status(400).send({ error: error });
         }

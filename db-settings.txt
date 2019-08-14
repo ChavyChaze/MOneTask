@@ -1,4 +1,6 @@
-CREATE TABLE Project (
+CREATE DATABASE magnetic;
+
+CREATE TABLE Projects (
   id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
   title varchar(20) NOT NULL,
   description varchar(200),
@@ -7,7 +9,7 @@ CREATE TABLE Project (
   PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
-CREATE TABLE Task (
+CREATE TABLE Tasks (
   id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
   projectId TINYINT UNSIGNED NOT NULL,
   title varchar(20) NOT NULL,

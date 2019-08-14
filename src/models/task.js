@@ -3,7 +3,7 @@
 const Sequelize = require('sequelize');
 const db = require('../../config/database');
 
-const Task = db.define('task', {
+const Task = db.define('Task', {
     projectId: {
         type: Sequelize.STRING
     },

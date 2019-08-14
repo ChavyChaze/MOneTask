@@ -25,7 +25,7 @@ module.exports = {
 
     getAllProjects: async (req, res, next) => {
         try {
-            await Project.find({}, async (err, project) => {
+            await Project.findAll({}, async (err, project) => {
                 if (err) {
                     return res.status(400).send({ error: err.message });
                 }

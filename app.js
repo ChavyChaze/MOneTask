@@ -5,10 +5,10 @@ const graphqlHTTP = require('express-graphql');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
+require('dotenv').config();
+
 const schema = require('./src/schema/schema');
 const db = require('./config/database');
-
-require('dotenv').config();
 
 db.authenticate()
   .then(() => console.log('MySQL connection established!'))
