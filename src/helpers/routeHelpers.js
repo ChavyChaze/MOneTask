@@ -20,16 +20,12 @@ module.exports = {
     schemas: {
         projectSchema: Joi.object().keys({
             title: Joi.string().max(20).regex(/^[A-Za-z .,'()-]{0,121}$/).required(),
-            description: Joi.string().max(200).regex(/^[A-Za-z .,'()-]{0,121}$/),
-            createdAt: Joi.date(),
-            updatedAt: Joi.date()
+            description: Joi.string().max(200).regex(/^[A-Za-z .,'()-]/)
         }),
         taskSchema: Joi.object().keys({
-            projectId: Joi.string().required(),
-            title: Joi.string().max(20).regex(/^[A-Za-z .,'()-]{0,121}$/).required(),
-            description: Joi.string().max(200).regex(/^[A-Za-z .,'()-]{0,121}$/),
-            createdAt: Joi.date(),
-            updatedAt: Joi.date()
+            projectId: Joi.number().required(),
+            title: Joi.string().max(20).regex(/^[A-Za-z .,'()-]/).required(),
+            description: Joi.string().max(200).regex(/^[A-Za-z .,'()-]/)
         })
     }
 }

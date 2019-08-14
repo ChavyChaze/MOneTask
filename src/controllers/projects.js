@@ -6,20 +6,17 @@ const Task = require('../models/task');
 module.exports = {
     addProject: async (req, res, next) => {
         try {
-            const { title, description } = req.value.body;
-            let newProject = {};
+            const { title, description } = req.body;
 
-            newProject = new Project({
+            await Project.create({
                 title,
                 description,
-                createdAt: new Date()
-            });
-
-            await newProject.save();
-
-            res.status(200).send(newProject);
+                createdAt: new Date(),
+                updatedAt: new Date()
+            })
+                .then(project => res.status(200).send(project));
         } catch (error) {
-            res.status(400).send({ message: 'Internal server error.' });
+            res.status(400).send({ message: 'Internal server error. '+ error });
         }
     },
 

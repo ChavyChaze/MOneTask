@@ -1,23 +1,30 @@
 'use strict'
 
 const Task = require('../models/task');
+const Project = require('../models/project');
 
 module.exports = {
     addTask: async (req, res, next) => {
-        try {
-            const { projectId, title, description } = req.value.body;
-            let newTask = {};
+        try {            
+            const { projectId, title, description } = req.body;
 
-            newTask = new Task({
-                projectId,
-                title,
-                description,
-                createdAt: new Date()
-            });
+            Project.findByPk(projectId)
+                .then(async project => {
+                    if (!project) {
+                        return res.status(400).send([{ data: 'Project not exists.' }]);
+                    }
 
-            await newTask.save();
+                    await Task.create({
+                        projectId,
+                        title,
+                        description,
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    })
+                        .then(project => res.status(200).send(project));
+                })
 
-            res.status(200).send(newTask);
+
         } catch (error) {
             res.status(400).send({ message: 'Internal server error.' });
         }

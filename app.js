@@ -1,13 +1,12 @@
 'use strict'
 
 const express = require('express');
-const graphqlHTTP = require('express-graphql');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 require('dotenv').config();
 
-const schema = require('./src/schema/schema');
 const db = require('./config/database');
 
 db.authenticate()
@@ -17,14 +16,11 @@ db.authenticate()
 const app = express();
 
 app.use(cors());
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
 // Routes
-app.use('/graphql', graphqlHTTP({
-  schema,
-  graphiql: true
-}));
 app.use('/projects', require('./src/routes/projects'));
 app.use('/tasks', require('./src/routes/tasks'));
 
