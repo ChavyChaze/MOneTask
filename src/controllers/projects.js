@@ -25,16 +25,8 @@ module.exports = {
 
     getAllProjects: async (req, res, next) => {
         try {
-            await Project.findAll({}, async (err, project) => {
-                if (err) {
-                    return res.status(400).send({ error: err.message });
-                }
-                let projectsMap = {};
-                project.forEach(project => {
-                    projectsMap[project._id] = project;
-                });
-                res.status(200).send(projectsMap);
-            });
+            await Project.findAll({ raw: true })
+                .then(project => project.length > 0 ? res.status(200).send(project) : res.status(200).send([{ data: 'No data' }]));
         } catch (error) {
             res.status(400).send({ error: error });
         }
