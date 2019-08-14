@@ -16,7 +16,7 @@ module.exports = {
             })
                 .then(project => res.status(200).send(project));
         } catch (error) {
-            res.status(400).send({ message: 'Internal server error. '+ error });
+            res.status(400).send({ message: 'Internal server error. ' + error });
         }
     },
 
@@ -32,22 +32,14 @@ module.exports = {
     changeTitle: async (req, res, next) => {
         try {
             const { projectId, title } = req.body;
-            await Project.findOneAndUpdate(
-                { _id: projectId },
-                {
-                    $set: {
+            await Project.findByPk(projectId)
+                .then(project => {
+                    project.update({
                         title,
                         updatedAt: new Date()
-                    }
-                },
-                {
-                    returnOriginal: false
-                },
-                (err, result) => {
-                    if (err) res.status(400).send();
-                }
-            );
-            res.status(200).send();
+                    })
+                        .then(project => res.status(200).send(project));
+                });
         } catch (error) {
             res.status(400).send({ error: error });
         }
@@ -56,22 +48,14 @@ module.exports = {
     changeDescription: async (req, res, next) => {
         try {
             const { projectId, description } = req.body;
-            await Project.findOneAndUpdate(
-                { _id: projectId },
-                {
-                    $set: {
+            await Project.findByPk(projectId)
+                .then(project => {
+                    project.update({
                         description,
                         updatedAt: new Date()
-                    }
-                },
-                {
-                    returnOriginal: false
-                },
-                (err, result) => {
-                    if (err) res.status(400).send();
-                }
-            );
-            res.status(200).send();
+                    })
+                        .then(project => res.status(200).send(project));
+                });
         } catch (error) {
             res.status(400).send({ error: error });
         }
@@ -79,22 +63,14 @@ module.exports = {
 
     getProject: async (req, res, next) => {
         try {
-            let projectsMap = {};
-            await Project.find(
-                {
-                    _id: req.params.projectId
-                },
-                async (err, project) => {
-                    if (err) {
-                        return res.status(400).send({ error: err.message });
+            await Project.findByPk(req.params.projectId)
+                .then(project => {
+                    if (!project) {
+                        res.status(400).send([{ data: 'Project not exists.' }]);
+                    } else {
+                        res.status(200);
                     }
-
-                    project.forEach(project => {
-                        projectsMap[project._id] = project
-                    });
-                }
-            );
-            res.status(200).send(projectsMap);
+                });
         } catch (error) {
             res.status(400).send({ error: error });
         }
@@ -102,17 +78,15 @@ module.exports = {
 
     deleteProject: async (req, res, next) => {
         try {
-            await Project.findOneAndDelete(
-                {
-                    _id: req.params.projectId
+            await Project.findByPk(req.params.projectId)
+                .then(project => {
+                    if (!project) {
+                        res.status(400).send([{ data: 'Project not exists.' }]);
+                    } else {
+                        project.destroy();
+                        res.status(200).send([{ data: 'Project deleted.' }]);
+                    }
                 });
-
-            await Task.deleteMany(
-                {
-                    projectId: req.params.projectId
-                }
-            );
-            res.status(200).send();
         } catch (error) {
             res.status(400).send({ error: error });
         }

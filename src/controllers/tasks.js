@@ -5,7 +5,7 @@ const Project = require('../models/project');
 
 module.exports = {
     addTask: async (req, res, next) => {
-        try {            
+        try {
             const { projectId, title, description } = req.body;
 
             Project.findByPk(projectId)
@@ -42,22 +42,14 @@ module.exports = {
     changeTitle: async (req, res, next) => {
         try {
             const { taskId, title } = req.body;
-            await Task.findOneAndUpdate(
-                { _id: taskId },
-                {
-                    $set: {
+            await Task.findByPk(taskId)
+                .then(task => {
+                    task.update({
                         title,
                         updatedAt: new Date()
-                    }
-                },
-                {
-                    returnOriginal: false
-                },
-                (err, result) => {
-                    if (err) res.status(400).send();
-                }
-            );
-            res.status(200).send();
+                    })
+                        .then(task => res.status(200).send(task));
+                });
         } catch (error) {
             res.status(400).send({ error: error });
         }
@@ -66,22 +58,14 @@ module.exports = {
     changeDescription: async (req, res, next) => {
         try {
             const { taskId, description } = req.body;
-            await Task.findOneAndUpdate(
-                { _id: taskId },
-                {
-                    $set: {
+            await Task.findByPk(taskId)
+                .then(task => {
+                    task.update({
                         description,
                         updatedAt: new Date()
-                    }
-                },
-                {
-                    returnOriginal: false
-                },
-                (err, result) => {
-                    if (err) res.status(400).send();
-                }
-            );
-            res.status(200).send();
+                    })
+                        .then(task => res.status(200).send(task));
+                });
         } catch (error) {
             res.status(400).send({ error: error });
         }
@@ -89,22 +73,14 @@ module.exports = {
 
     getTask: async (req, res, next) => {
         try {
-            let tasksMap = {};
-            await Task.find(
-                {
-                    _id: req.params.taskId
-                },
-                async (err, task) => {
-                    if (err) {
-                        return res.status(400).send({ error: err.message });
+            await Project.findByPk(req.params.taskId)
+                .then(task => {
+                    if (!task) {
+                        res.status(400).send([{ data: 'Task not exists.' }]);
+                    } else {
+                        res.status(200).send(task);
                     }
-
-                    task.forEach(task => {
-                        tasksMap[task._id] = task
-                    });
-                }
-            );
-            res.status(200).send(tasksMap);
+                });
         } catch (error) {
             res.status(400).send({ error: error });
         }
@@ -112,12 +88,15 @@ module.exports = {
 
     deleteTask: async (req, res, next) => {
         try {
-            await Task.findOneAndDelete(
-                {
-                    _id: req.params.taskId
+            await Project.findByPk(req.params.taskId)
+                .then(task => {
+                    if (!task) {
+                        res.status(400).send([{ data: 'Task not exists.' }]);
+                    } else {
+                        task.destroy();
+                        res.status(200).send([{ data: 'Task deleted.' }]);
+                    }
                 });
-
-            res.status(200).send();
         } catch (error) {
             res.status(400).send({ error: error });
         }
