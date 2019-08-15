@@ -1,5 +1,13 @@
-FROM nginx:latest
+FROM node:latest
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+RUN npm install
 
 COPY . .
+
+EXPOSE 8080
+
+CMD ["npm", ""]

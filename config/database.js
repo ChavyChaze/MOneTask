@@ -17,3 +17,5 @@ const db = new Sequeliza('sql7301704', 'sql7301704', 'NUVrEyxiQj', {
     idle: 10000
   }
 });
+
+module.exports = db;
